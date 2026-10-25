@@ -1,0 +1,67 @@
+{
+  "name": "karmin-client",
+  "version": "1.0.0",
+  "description": "Karmin Client — магазин и лаунчер приложений студии KARMIN",
+  "main": "main.js",
+  "scripts": {
+    "scene": "esbuild src/scene.module.js --bundle --format=iife --minify --target=es2020 --outfile=renderer/scene.js",
+    "start": "npm run scene && electron .",
+    "test": "node test/test.js",
+    "test:live": "node test/test.js --live",
+    "dist": "npm run scene && electron-builder --win nsis --x64"
+  },
+  "author": "KARMIN Studio",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.24.2"
+  },
+  "productName": "Karmin Client",
+  "build": {
+    "appId": "studio.karmin.client",
+    "productName": "Karmin Client",
+    "copyright": "© 2026 KARMIN Studio",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/apps.js",
+      "src/github.js",
+      "renderer/**/*",
+      "build/icon.ico",
+      "build/icon.png",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "KarminClient-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Karmin Client",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "language": "1049",
+      "multiLanguageInstaller": false,
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'">
+<title>Karmin Client</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="booting">
+<canvas id="bg-shader"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<!-- Заставка -->
+<div class="splash" id="splash">
+  <img src="assets/logo.svg" alt="" class="splash-logo">
+  <div class="splash-word">KARMIN</div>
+  <div class="splash-bar"><i></i></div>
+</div>
+
+<!-- Собственный заголовок окна -->
+<header class="titlebar">
+  <div class="tb-brand"><img src="assets/logo.svg" alt=""><span>KARMIN <b>CLIENT</b></span></div>
+  <div class="tb-drag"></div>
+  <div class="tb-btns">
+    <button class="tb-btn" id="tb-min" title="Свернуть"><svg viewBox="0 0 12 12"><path d="M2 6h8"/></svg></button>
+    <button class="tb-btn" id="tb-max" title="Развернуть"><svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" rx="1"/></svg></button>
+    <button class="tb-btn tb-close" id="tb-close" title="Закрыть"><svg viewBox="0 0 12 12"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg></button>
+  </div>
+</header>
+
+<div class="shell">
+  <!-- Выезжающее меню -->
+  <aside class="sidebar" id="sidebar">
+    <button class="burger" id="burger" title="Меню"><span></span><span></span><span></span></button>
+    <nav class="nav">
+      <div class="nav-glow" id="nav-glow"></div>
+      <button class="nav-item active" data-view="home">
+        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>
+        <span>Главная</span>
+      </button>
+      <button class="nav-item" data-view="downloads">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg>
+        <span>Скачивания</span><em class="badge" id="dl-badge" hidden>0</em>
+      </button>
+      <button class="nav-item" data-view="library">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>Библиотека</span>
+      </button>
+    </nav>
+    <div class="side-foot">
+      <div class="side-card">
+        <div class="dot"></div>
+        <div><b>KARMIN Studio</b><small id="ver">v1.0.0</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content" id="content">
+    <!-- ГЛАВНАЯ -->
+    <section class="view active" data-view="home">
+      <div class="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-text">
+          <span class="eyebrow"><span class="dot"></span>Магазин приложений KARMIN</span>
+          <h1 class="reveal">Все наши<br>приложения —<br><em>в одном месте</em></h1>
+          <p class="reveal">Устанавливайте, обновляйте и запускайте приложения студии в один клик. Всегда свежие версии прямо с GitHub.</p>
+          <div class="hero-cta reveal">
+            <button class="btn" data-go="library">Открыть библиотеку <span class="arrow">→</span></button>
+            <span class="hero-stat"><b id="stat-apps">0</b> <span id="stat-apps-w">приложений</span> · <b id="stat-installed">0</b> установлено</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-head">
+        <h2>Рекомендуем</h2>
+        <span class="muted">Лучшее от KARMIN</span>
+      </div>
+      <div class="cards" id="rec-cards"></div>
+    </section>
+
+    <!-- СКАЧИВАНИЯ -->
+    <section class="view" data-view="downloads">
+      <div class="page-head">
+        <h1>Скачивания</h1>
+        <button class="ghost" id="dl-clear">Очистить завершённые</button>
+      </div>
+      <h3 class="sub">Активные</h3>
+      <div class="dl-list" id="dl-active"></div>
+      <h3 class="sub">Завершённые</h3>
+      <div class="dl-list" id="dl-done"></div>
+    </section>
+
+    <!-- БИБЛИОТЕКА -->
+    <section class="view" data-view="library">
+      <div class="page-head">
+        <h1>Библиотека</h1>
+        <div class="head-tools">
+          <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="search" placeholder="Поиск приложений"></div>
+          <button class="ghost icon-only" id="refresh" title="Проверить обновления"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg></button>
+        </div>
+      </div>
+      <div class="filters" id="filters">
+        <button class="chip active" data-f="all">Все</button>
+        <button class="chip" data-f="installed">Установленные</button>
+        <button class="chip" data-f="update">Обновления</button>
+        <button class="chip" data-f="none">Не установлены</button>
+      </div>
+      <div class="lib" id="lib"></div>
+    </section>
+  </main>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<script src="scene.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
